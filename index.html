@@ -2,7 +2,6 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-
     <meta
         name="viewport"
         content="width=device-width, initial-scale=1.0"
@@ -10,7 +9,6 @@
 
     <title>We Capital | Identificación de ingresos</title>
 
-    <!-- Google Font -->
     <link
         rel="preconnect"
         href="https://fonts.googleapis.com"
@@ -27,20 +25,15 @@
         rel="stylesheet"
     >
 
-    <!-- Main stylesheet -->
     <link
         rel="stylesheet"
-        href="styles.css"
+        href="./css/styles.css"
     >
 </head>
 
 <body>
 
     <div class="app-shell">
-
-        <!-- =====================================================
-             SIDEBAR
-             ===================================================== -->
 
         <aside class="sidebar">
 
@@ -101,7 +94,9 @@
 
                 <div>
                     <small>System status</small>
-                    <strong>Operational</strong>
+                    <strong id="systemStatus">
+                        Waiting for data
+                    </strong>
                 </div>
 
             </div>
@@ -109,15 +104,7 @@
         </aside>
 
 
-        <!-- =====================================================
-             MAIN
-             ===================================================== -->
-
         <main class="main">
-
-            <!-- =================================================
-                 TOP BAR
-                 ================================================= -->
 
             <header class="topbar">
 
@@ -127,7 +114,7 @@
 
                     <input
                         id="globalSearch"
-                        type="text"
+                        type="search"
                         placeholder="Search invoice, broker, client or amount..."
                         autocomplete="off"
                     >
@@ -138,13 +125,13 @@
                 <div class="top-meta">
 
                     <span id="dataStatus">
-                        No data loaded
+                        Loading report...
                     </span>
 
                     <button
                         class="icon-btn"
                         id="refreshBtn"
-                        title="Refresh data"
+                        title="Reload report"
                     >
                         ↻
                     </button>
@@ -154,9 +141,7 @@
             </header>
 
 
-            <!-- =================================================
-                 IDENTIFICATION VIEW
-                 ================================================= -->
+            <!-- IDENTIFICATION -->
 
             <section
                 id="view-identification"
@@ -176,16 +161,15 @@
                         </h1>
 
                         <p>
-                            Match a payment received from a broker
-                            against open accounts receivable movements.
+                            Search open AR movements and find the
+                            transactions that explain a payment
+                            received from a broker.
                         </p>
 
                     </div>
 
                 </div>
 
-
-                <!-- Identification form -->
 
                 <div class="identify-card">
 
@@ -248,8 +232,6 @@
                 </div>
 
 
-                <!-- Results -->
-
                 <div
                     id="identificationResults"
                     class="results"
@@ -266,9 +248,10 @@
                         </h2>
 
                         <p>
-                            Enter the broker and payment amount.
-                            The system will search the available
-                            AR movements and suggest possible matches.
+                            Enter a broker and payment amount.
+                            The system will search the loaded AR
+                            report and return exact matches,
+                            combinations and closest candidates.
                         </p>
 
                     </div>
@@ -278,9 +261,7 @@
             </section>
 
 
-            <!-- =================================================
-                 DASHBOARD VIEW
-                 ================================================= -->
+            <!-- DASHBOARD -->
 
             <section
                 id="view-dashboard"
@@ -300,8 +281,8 @@
                         </h1>
 
                         <p>
-                            Summary of the currently loaded accounts
-                            receivable report.
+                            Summary of the currently loaded
+                            accounts receivable report.
                         </p>
 
                     </div>
@@ -309,14 +290,12 @@
                 </div>
 
 
-                <!-- KPI cards -->
-
                 <div class="kpi-grid">
 
                     <div class="kpi">
 
                         <span>
-                            Total movements
+                            Transactions
                         </span>
 
                         <strong id="kpiMovements">
@@ -324,7 +303,7 @@
                         </strong>
 
                         <small>
-                            Records loaded
+                            Valid rows loaded
                         </small>
 
                     </div>
@@ -333,7 +312,7 @@
                     <div class="kpi">
 
                         <span>
-                            Open AR
+                            Current balance
                         </span>
 
                         <strong id="kpiOpenAR">
@@ -341,7 +320,7 @@
                         </strong>
 
                         <small>
-                            Current balance
+                            Last report balance
                         </small>
 
                     </div>
@@ -358,7 +337,7 @@
                         </strong>
 
                         <small>
-                            Unique brokers
+                            Unique normalized brokers
                         </small>
 
                     </div>
@@ -383,8 +362,6 @@
                 </div>
 
 
-                <!-- Dashboard panels -->
-
                 <div class="dashboard-grid">
 
                     <div class="panel chart-panel">
@@ -394,12 +371,12 @@
                             <div>
 
                                 <h2>
-                                    Open AR by broker
+                                    AR activity by broker
                                 </h2>
 
                                 <p>
-                                    Distribution of outstanding
-                                    receivable balances.
+                                    Largest broker balances/activity
+                                    in the loaded report.
                                 </p>
 
                             </div>
@@ -409,9 +386,7 @@
 
                         <div class="chart-wrapper">
 
-                            <canvas
-                                id="brokerChart"
-                            ></canvas>
+                            <canvas id="brokerChart"></canvas>
 
                         </div>
 
@@ -429,7 +404,7 @@
                                 </h2>
 
                                 <p>
-                                    Highest open AR balances.
+                                    Top brokers by activity.
                                 </p>
 
                             </div>
@@ -437,17 +412,7 @@
                         </div>
 
 
-                        <div id="brokerSummary">
-
-                            <div class="empty-state">
-
-                                <p>
-                                    No data available.
-                                </p>
-
-                            </div>
-
-                        </div>
+                        <div id="brokerSummary"></div>
 
                     </div>
 
@@ -456,9 +421,7 @@
             </section>
 
 
-            <!-- =================================================
-                 BROKERS VIEW
-                 ================================================= -->
+            <!-- BROKERS -->
 
             <section
                 id="view-brokers"
@@ -478,7 +441,8 @@
                         </h1>
 
                         <p>
-                            Explore open AR balances by broker.
+                            Search and inspect the movements
+                            associated with a broker.
                         </p>
 
                     </div>
@@ -490,7 +454,7 @@
 
                     <input
                         id="brokerSearch"
-                        type="text"
+                        type="search"
                         placeholder="Search broker..."
                         autocomplete="off"
                     >
@@ -505,33 +469,12 @@
                 <div
                     id="brokerGrid"
                     class="broker-grid"
-                >
-
-                    <div class="empty-state">
-
-                        <div class="empty-icon">
-                            ◎
-                        </div>
-
-                        <h2>
-                            No brokers available
-                        </h2>
-
-                        <p>
-                            Load an AR report from the Data section
-                            to populate this view.
-                        </p>
-
-                    </div>
-
-                </div>
+                ></div>
 
             </section>
 
 
-            <!-- =================================================
-                 DATA VIEW
-                 ================================================= -->
+            <!-- DATA -->
 
             <section
                 id="view-data"
@@ -551,8 +494,9 @@
                         </h1>
 
                         <p>
-                            Load the accounts receivable report used
-                            by the identification engine.
+                            Load a new report without replacing
+                            the active dataset until validation
+                            and processing finish successfully.
                         </p>
 
                     </div>
@@ -561,8 +505,6 @@
 
 
                 <div class="data-grid">
-
-                    <!-- Upload -->
 
                     <div class="panel upload-panel">
 
@@ -575,8 +517,9 @@
                         </h2>
 
                         <p>
-                            Upload an Excel workbook containing the
-                            accounts receivable movements.
+                            Excel files are validated, normalized
+                            and indexed before becoming the
+                            active dataset.
                         </p>
 
 
@@ -600,10 +543,51 @@
                             Or drag and drop the file here
                         </div>
 
+
+                        <div
+                            id="uploadProgress"
+                            class="upload-progress hidden"
+                        >
+
+                            <div class="progress-head">
+
+                                <strong id="progressTitle">
+                                    Processing report
+                                </strong>
+
+                                <span id="progressPercent">
+                                    0%
+                                </span>
+
+                            </div>
+
+
+                            <div class="progress-track">
+
+                                <div
+                                    id="progressBar"
+                                    class="progress-bar"
+                                ></div>
+
+                            </div>
+
+
+                            <div class="progress-meta">
+
+                                <span id="progressMessage">
+                                    Preparing...
+                                </span>
+
+                                <span id="progressRows">
+                                    0 rows
+                                </span>
+
+                            </div>
+
+                        </div>
+
                     </div>
 
-
-                    <!-- Data information -->
 
                     <div class="panel">
 
@@ -615,8 +599,8 @@
                                     Current dataset
                                 </h2>
 
-                                <p>
-                                    Information about the loaded report.
+                                <p id="datasetMessage">
+                                    No report loaded.
                                 </p>
 
                             </div>
@@ -627,54 +611,47 @@
                         <div class="data-stats">
 
                             <div class="data-stat">
-
-                                <span>
-                                    File
-                                </span>
-
-                                <strong id="dataFileName">
-                                    —
-                                </strong>
-
+                                <span>File</span>
+                                <strong id="dataFileName">—</strong>
                             </div>
 
-
                             <div class="data-stat">
-
-                                <span>
-                                    Rows
-                                </span>
-
-                                <strong id="dataRows">
-                                    0
-                                </strong>
-
+                                <span>Rows</span>
+                                <strong id="dataRows">0</strong>
                             </div>
 
-
                             <div class="data-stat">
-
-                                <span>
-                                    Brokers
-                                </span>
-
-                                <strong id="dataBrokers">
-                                    0
-                                </strong>
-
+                                <span>Brokers</span>
+                                <strong id="dataBrokers">0</strong>
                             </div>
 
+                            <div class="data-stat">
+                                <span>Clients</span>
+                                <strong id="dataClients">0</strong>
+                            </div>
 
                             <div class="data-stat">
+                                <span>Start date</span>
+                                <strong id="dataStartDate">—</strong>
+                            </div>
 
-                                <span>
-                                    Clients
-                                </span>
+                            <div class="data-stat">
+                                <span>End date</span>
+                                <strong id="dataEndDate">—</strong>
+                            </div>
 
-                                <strong id="dataClients">
-                                    0
+                            <div class="data-stat">
+                                <span>Beginning balance</span>
+                                <strong id="dataBeginningBalance">
+                                    $0.00
                                 </strong>
+                            </div>
 
+                            <div class="data-stat">
+                                <span>Last balance</span>
+                                <strong id="dataLastBalance">
+                                    $0.00
+                                </strong>
                             </div>
 
                         </div>
@@ -685,17 +662,22 @@
                             <ul>
 
                                 <li>
-                                    The application works in read-only mode.
+                                    The report is read-only.
                                 </li>
 
                                 <li>
-                                    The AR report is used only for
-                                    identification and analysis.
+                                    Blank rows and Beginning Balance
+                                    are handled separately.
                                 </li>
 
                                 <li>
-                                    No payments or journal entries
-                                    are created automatically.
+                                    Broker, client and invoice searches
+                                    use normalized indexes.
+                                </li>
+
+                                <li>
+                                    A failed upload does not replace
+                                    the active report.
                                 </li>
 
                             </ul>
@@ -713,9 +695,7 @@
     </div>
 
 
-    <!-- =========================================================
-         TOAST
-         ========================================================= -->
+    <!-- Toast -->
 
     <div
         id="toast"
@@ -725,9 +705,7 @@
     ></div>
 
 
-    <!-- =========================================================
-         BROKER DETAIL MODAL
-         ========================================================= -->
+    <!-- Broker modal -->
 
     <div
         id="brokerModal"
@@ -745,6 +723,7 @@
             class="modal-card"
             role="dialog"
             aria-modal="true"
+            aria-labelledby="brokerModalTitle"
         >
 
             <button
@@ -757,38 +736,23 @@
             </button>
 
 
-            <div
-                id="brokerModalContent"
-            ></div>
+            <div id="brokerModalContent"></div>
 
         </div>
 
     </div>
 
 
-    <!-- =========================================================
-         EXTERNAL LIBRARIES
-         ========================================================= -->
+    <!-- Libraries -->
 
-    <!-- SheetJS -->
-    <script
-        src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"
-    ></script>
+    <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.7/dist/chart.umd.min.js"></script>
 
 
-    <!-- Chart.js -->
-    <script
-        src="https://cdn.jsdelivr.net/npm/chart.js@4.4.7/dist/chart.umd.min.js"
-    ></script>
+    <!-- Application -->
 
-
-    <!-- =========================================================
-         APPLICATION JAVASCRIPT
-         ========================================================= -->
-
-    <script
-        src="app.js"
-    ></script>
+    <script src="./js/app.js"></script>
 
 </body>
 </html>
