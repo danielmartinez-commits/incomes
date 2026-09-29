@@ -1,82 +1,794 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="theme-color" content="#111A33">
-  <title>We Capital | Identificación de ingresos</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="css/styles.css">
-  <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.7/dist/chart.umd.min.js"></script>
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>We Capital | Identificación de ingresos</title>
+
+    <!-- Google Font -->
+    <link
+        rel="preconnect"
+        href="https://fonts.googleapis.com"
+    >
+
+    <link
+        rel="preconnect"
+        href="https://fonts.gstatic.com"
+        crossorigin
+    >
+
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
+        rel="stylesheet"
+    >
+
+    <!-- Main stylesheet -->
+    <link
+        rel="stylesheet"
+        href="./css/styles.css"
+    >
 </head>
+
 <body>
-  <div class="app-shell">
-    <aside class="sidebar">
-      <div class="brand"><div class="brand-mark">W</div><div><strong>We Capital</strong><span>Income Identification</span></div></div>
-      <nav class="nav">
-        <button class="nav-item active" data-view="identify"><span>⌕</span>Identification</button>
-        <button class="nav-item" data-view="dashboard"><span>◫</span>Dashboard</button>
-        <button class="nav-item" data-view="brokers"><span>◎</span>Brokers</button>
-        <button class="nav-item" data-view="data"><span>↥</span>Data</button>
-      </nav>
-      <div class="sidebar-footer"><div class="status-dot"></div><div><small>Data status</small><strong id="sidebarStatus">Loading...</strong></div></div>
-    </aside>
 
-    <main class="main">
-      <header class="topbar">
-        <div class="global-search"><span>⌕</span><input id="globalSearch" type="search" placeholder="Search broker, client, invoice or amount..."></div>
-        <div class="top-meta"><span id="reportDate">No report</span><button id="refreshBtn" class="icon-btn" title="Reload saved report">↻</button></div>
-      </header>
+    <div class="app-shell">
 
-      <section id="view-identify" class="view active-view">
-        <div class="page-heading"><div><p class="eyebrow">We Capital</p><h1>Income identification</h1><p>Find open receivables that may correspond to an incoming payment.</p></div></div>
-        <div class="identify-card">
-          <div class="field"><label>Broker</label><input id="brokerInput" list="brokerList" placeholder="e.g. RXO Capacity Solutions LLC"><datalist id="brokerList"></datalist></div>
-          <div class="field"><label>Payment amount</label><input id="amountInput" inputmode="decimal" placeholder="$ 0.00"></div>
-          <div class="field"><label>Payment date <span>optional</span></label><input id="dateInput" type="date"></div>
-          <button id="identifyBtn" class="primary-btn">Identify <span>→</span></button>
+        <!-- =====================================================
+             SIDEBAR
+             ===================================================== -->
+
+        <aside class="sidebar">
+
+            <div class="brand">
+
+                <div class="brand-mark">
+                    WC
+                </div>
+
+                <div>
+                    <strong>We Capital</strong>
+                    <span>Income Identification</span>
+                </div>
+
+            </div>
+
+
+            <nav class="nav">
+
+                <button
+                    class="nav-item active"
+                    data-view="identification"
+                >
+                    <span>⌕</span>
+                    Identification
+                </button>
+
+                <button
+                    class="nav-item"
+                    data-view="dashboard"
+                >
+                    <span>◫</span>
+                    Dashboard
+                </button>
+
+                <button
+                    class="nav-item"
+                    data-view="brokers"
+                >
+                    <span>◎</span>
+                    Brokers
+                </button>
+
+                <button
+                    class="nav-item"
+                    data-view="data"
+                >
+                    <span>▤</span>
+                    Data
+                </button>
+
+            </nav>
+
+
+            <div class="sidebar-footer">
+
+                <div class="status-dot"></div>
+
+                <div>
+                    <small>System status</small>
+                    <strong>Operational</strong>
+                </div>
+
+            </div>
+
+        </aside>
+
+
+        <!-- =====================================================
+             MAIN
+             ===================================================== -->
+
+        <main class="main">
+
+            <!-- =================================================
+                 TOP BAR
+                 ================================================= -->
+
+            <header class="topbar">
+
+                <div class="global-search">
+
+                    <span>⌕</span>
+
+                    <input
+                        id="globalSearch"
+                        type="text"
+                        placeholder="Search invoice, broker, client or amount..."
+                        autocomplete="off"
+                    >
+
+                </div>
+
+
+                <div class="top-meta">
+
+                    <span id="dataStatus">
+                        No data loaded
+                    </span>
+
+                    <button
+                        class="icon-btn"
+                        id="refreshBtn"
+                        title="Refresh data"
+                    >
+                        ↻
+                    </button>
+
+                </div>
+
+            </header>
+
+
+            <!-- =================================================
+                 IDENTIFICATION VIEW
+                 ================================================= -->
+
+            <section
+                id="view-identification"
+                class="view active-view"
+            >
+
+                <div class="page-heading">
+
+                    <div>
+
+                        <p class="eyebrow">
+                            Income Identification
+                        </p>
+
+                        <h1>
+                            Identify incoming payments
+                        </h1>
+
+                        <p>
+                            Match a payment received from a broker
+                            against open accounts receivable movements.
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+                <!-- Identification form -->
+
+                <div class="identify-card">
+
+                    <div class="field">
+
+                        <label for="brokerInput">
+                            Broker
+                        </label>
+
+                        <input
+                            id="brokerInput"
+                            type="text"
+                            placeholder="Enter broker name"
+                            autocomplete="off"
+                        >
+
+                    </div>
+
+
+                    <div class="field">
+
+                        <label for="amountInput">
+                            Payment amount
+                        </label>
+
+                        <input
+                            id="amountInput"
+                            type="number"
+                            step="0.01"
+                            min="0"
+                            placeholder="0.00"
+                        >
+
+                    </div>
+
+
+                    <div class="field">
+
+                        <label for="paymentDateInput">
+                            Payment date
+                            <span>(optional)</span>
+                        </label>
+
+                        <input
+                            id="paymentDateInput"
+                            type="date"
+                        >
+
+                    </div>
+
+
+                    <button
+                        id="identifyBtn"
+                        class="primary-btn"
+                        type="button"
+                    >
+                        Identify
+                    </button>
+
+                </div>
+
+
+                <!-- Results -->
+
+                <div
+                    id="identificationResults"
+                    class="results"
+                >
+
+                    <div class="empty-state">
+
+                        <div class="empty-icon">
+                            ⌕
+                        </div>
+
+                        <h2>
+                            Ready to identify a payment
+                        </h2>
+
+                        <p>
+                            Enter the broker and payment amount.
+                            The system will search the available
+                            AR movements and suggest possible matches.
+                        </p>
+
+                    </div>
+
+                </div>
+
+            </section>
+
+
+            <!-- =================================================
+                 DASHBOARD VIEW
+                 ================================================= -->
+
+            <section
+                id="view-dashboard"
+                class="view"
+            >
+
+                <div class="page-heading">
+
+                    <div>
+
+                        <p class="eyebrow">
+                            Dashboard
+                        </p>
+
+                        <h1>
+                            AR identification overview
+                        </h1>
+
+                        <p>
+                            Summary of the currently loaded accounts
+                            receivable report.
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+                <!-- KPI cards -->
+
+                <div class="kpi-grid">
+
+                    <div class="kpi">
+
+                        <span>
+                            Total movements
+                        </span>
+
+                        <strong id="kpiMovements">
+                            0
+                        </strong>
+
+                        <small>
+                            Records loaded
+                        </small>
+
+                    </div>
+
+
+                    <div class="kpi">
+
+                        <span>
+                            Open AR
+                        </span>
+
+                        <strong id="kpiOpenAR">
+                            $0.00
+                        </strong>
+
+                        <small>
+                            Current balance
+                        </small>
+
+                    </div>
+
+
+                    <div class="kpi">
+
+                        <span>
+                            Brokers
+                        </span>
+
+                        <strong id="kpiBrokers">
+                            0
+                        </strong>
+
+                        <small>
+                            Unique brokers
+                        </small>
+
+                    </div>
+
+
+                    <div class="kpi">
+
+                        <span>
+                            Clients
+                        </span>
+
+                        <strong id="kpiClients">
+                            0
+                        </strong>
+
+                        <small>
+                            Unique clients
+                        </small>
+
+                    </div>
+
+                </div>
+
+
+                <!-- Dashboard panels -->
+
+                <div class="dashboard-grid">
+
+                    <div class="panel chart-panel">
+
+                        <div class="panel-head">
+
+                            <div>
+
+                                <h2>
+                                    Open AR by broker
+                                </h2>
+
+                                <p>
+                                    Distribution of outstanding
+                                    receivable balances.
+                                </p>
+
+                            </div>
+
+                        </div>
+
+
+                        <div class="chart-wrapper">
+
+                            <canvas
+                                id="brokerChart"
+                            ></canvas>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="panel">
+
+                        <div class="panel-head">
+
+                            <div>
+
+                                <h2>
+                                    Broker summary
+                                </h2>
+
+                                <p>
+                                    Highest open AR balances.
+                                </p>
+
+                            </div>
+
+                        </div>
+
+
+                        <div id="brokerSummary">
+
+                            <div class="empty-state">
+
+                                <p>
+                                    No data available.
+                                </p>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </section>
+
+
+            <!-- =================================================
+                 BROKERS VIEW
+                 ================================================= -->
+
+            <section
+                id="view-brokers"
+                class="view"
+            >
+
+                <div class="page-heading">
+
+                    <div>
+
+                        <p class="eyebrow">
+                            Brokers
+                        </p>
+
+                        <h1>
+                            Broker explorer
+                        </h1>
+
+                        <p>
+                            Explore open AR balances by broker.
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+                <div class="toolbar">
+
+                    <input
+                        id="brokerSearch"
+                        type="text"
+                        placeholder="Search broker..."
+                        autocomplete="off"
+                    >
+
+                    <span id="brokerCount">
+                        0 brokers
+                    </span>
+
+                </div>
+
+
+                <div
+                    id="brokerGrid"
+                    class="broker-grid"
+                >
+
+                    <div class="empty-state">
+
+                        <div class="empty-icon">
+                            ◎
+                        </div>
+
+                        <h2>
+                            No brokers available
+                        </h2>
+
+                        <p>
+                            Load an AR report from the Data section
+                            to populate this view.
+                        </p>
+
+                    </div>
+
+                </div>
+
+            </section>
+
+
+            <!-- =================================================
+                 DATA VIEW
+                 ================================================= -->
+
+            <section
+                id="view-data"
+                class="view"
+            >
+
+                <div class="page-heading">
+
+                    <div>
+
+                        <p class="eyebrow">
+                            Data
+                        </p>
+
+                        <h1>
+                            AR report
+                        </h1>
+
+                        <p>
+                            Load the accounts receivable report used
+                            by the identification engine.
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+                <div class="data-grid">
+
+                    <!-- Upload -->
+
+                    <div class="panel upload-panel">
+
+                        <div class="upload-icon">
+                            ↑
+                        </div>
+
+                        <h2>
+                            Upload AR report
+                        </h2>
+
+                        <p>
+                            Upload an Excel workbook containing the
+                            accounts receivable movements.
+                        </p>
+
+
+                        <label class="file-btn">
+
+                            Select Excel file
+
+                            <input
+                                id="fileInput"
+                                type="file"
+                                accept=".xlsx,.xls,.csv"
+                            >
+
+                        </label>
+
+
+                        <div
+                            id="dropZone"
+                            class="drop-zone"
+                        >
+                            Or drag and drop the file here
+                        </div>
+
+                    </div>
+
+
+                    <!-- Data information -->
+
+                    <div class="panel">
+
+                        <div class="panel-head">
+
+                            <div>
+
+                                <h2>
+                                    Current dataset
+                                </h2>
+
+                                <p>
+                                    Information about the loaded report.
+                                </p>
+
+                            </div>
+
+                        </div>
+
+
+                        <div class="data-stats">
+
+                            <div class="data-stat">
+
+                                <span>
+                                    File
+                                </span>
+
+                                <strong id="dataFileName">
+                                    —
+                                </strong>
+
+                            </div>
+
+
+                            <div class="data-stat">
+
+                                <span>
+                                    Rows
+                                </span>
+
+                                <strong id="dataRows">
+                                    0
+                                </strong>
+
+                            </div>
+
+
+                            <div class="data-stat">
+
+                                <span>
+                                    Brokers
+                                </span>
+
+                                <strong id="dataBrokers">
+                                    0
+                                </strong>
+
+                            </div>
+
+
+                            <div class="data-stat">
+
+                                <span>
+                                    Clients
+                                </span>
+
+                                <strong id="dataClients">
+                                    0
+                                </strong>
+
+                            </div>
+
+                        </div>
+
+
+                        <div class="notes">
+
+                            <ul>
+
+                                <li>
+                                    The application works in read-only mode.
+                                </li>
+
+                                <li>
+                                    The AR report is used only for
+                                    identification and analysis.
+                                </li>
+
+                                <li>
+                                    No payments or journal entries
+                                    are created automatically.
+                                </li>
+
+                            </ul>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </section>
+
+        </main>
+
+    </div>
+
+
+    <!-- =========================================================
+         TOAST
+         ========================================================= -->
+
+    <div
+        id="toast"
+        class="toast"
+        role="status"
+        aria-live="polite"
+    ></div>
+
+
+    <!-- =========================================================
+         BROKER DETAIL MODAL
+         ========================================================= -->
+
+    <div
+        id="brokerModal"
+        class="modal hidden"
+        aria-hidden="true"
+    >
+
+        <div
+            class="modal-backdrop"
+            data-close-modal
+        ></div>
+
+
+        <div
+            class="modal-card"
+            role="dialog"
+            aria-modal="true"
+        >
+
+            <button
+                id="closeBrokerModal"
+                class="modal-close"
+                type="button"
+                aria-label="Close"
+            >
+                ×
+            </button>
+
+
+            <div
+                id="brokerModalContent"
+            ></div>
+
         </div>
-        <div id="identifyEmpty" class="empty-state"><div class="empty-icon">⌁</div><h2>Ready to identify</h2><p>Enter a broker and payment amount. The application ranks exact and possible matches using amount and date.</p></div>
-        <div id="identifyResults" class="hidden"></div>
-      </section>
 
-      <section id="view-dashboard" class="view">
-        <div class="page-heading"><div><p class="eyebrow">Overview</p><h1>Dashboard</h1><p>Current report visibility for open receivables.</p></div></div>
-        <div class="kpi-grid">
-          <article class="kpi"><span>Movements</span><strong id="kpiMovements">—</strong><small>Valid rows</small></article>
-          <article class="kpi"><span>Report amount</span><strong id="kpiAmount">—</strong><small>Sum of movements</small></article>
-          <article class="kpi"><span>Brokers</span><strong id="kpiBrokers">—</strong><small>Distinct brokers</small></article>
-          <article class="kpi"><span>Clients</span><strong id="kpiClients">—</strong><small>Distinct clients</small></article>
-        </div>
-        <div class="dashboard-grid">
-          <article class="panel chart-panel"><div class="panel-head"><div><h2>Top brokers by movement amount</h2><p>Current report aggregation.</p></div></div><div class="chart-wrapper"><canvas id="brokerChart"></canvas></div></article>
-          <article class="panel"><div class="panel-head"><div><h2>Largest broker positions</h2><p>Highest aggregate amounts.</p></div></div><div id="topBrokersTable"></div></article>
-        </div>
-      </section>
+    </div>
 
-      <section id="view-brokers" class="view">
-        <div class="page-heading"><div><p class="eyebrow">Explorer</p><h1>Brokers</h1><p>Inspect movement history available in the current report.</p></div></div>
-        <div class="toolbar"><input id="brokerFilter" type="search" placeholder="Search brokers..."><span id="brokerCount">0 brokers</span></div>
-        <div id="brokerCards" class="broker-grid"></div>
-      </section>
 
-      <section id="view-data" class="view">
-        <div class="page-heading"><div><p class="eyebrow">Data manager</p><h1>Report data</h1><p>Load a new Excel report. Processing occurs locally in this browser.</p></div></div>
-        <div class="data-grid">
-          <article class="panel upload-panel"><div class="upload-icon">↑</div><h2>Replace current report</h2><p>The new file is validated before replacing the current dataset.</p><label class="file-btn">Choose Excel report<input id="fileInput" type="file" accept=".xlsx,.xls,.csv"></label><div id="dropZone" class="drop-zone">or drag and drop the file here</div></article>
-          <article class="panel"><div class="panel-head"><div><h2>Current dataset</h2><p id="dataDescription">No report loaded.</p></div></div><div id="dataStats" class="data-stats"></div></article>
-        </div>
-        <div class="panel notes"><h2>Production notes</h2><ul><li>Read-only: no AR or accounting entries are modified.</li><li>Excel files are processed locally in the browser.</li><li>The active dataset is stored in IndexedDB.</li><li>A new report replaces the current dataset only after validation succeeds.</li><li>Do not publish real company reports in a public GitHub repository.</li></ul></div>
-      </section>
-    </main>
-  </div>
+    <!-- =========================================================
+         EXTERNAL LIBRARIES
+         ========================================================= -->
 
-  <div id="toast" class="toast" role="status"></div>
-  <div id="modal" class="modal hidden" aria-hidden="true"><div class="modal-backdrop"></div><div class="modal-card" role="dialog"><button id="modalClose" class="modal-close">×</button><div id="modalContent"></div></div></div>
+    <!-- SheetJS -->
+    <script
+        src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"
+    ></script>
 
-  <script src="js/app.js"></script>
+
+    <!-- Chart.js -->
+    <script
+        src="https://cdn.jsdelivr.net/npm/chart.js@4.4.7/dist/chart.umd.min.js"
+    ></script>
+
+
+    <!-- =========================================================
+         APPLICATION JAVASCRIPT
+         ========================================================= -->
+
+    <script
+        src="./js/app.js"
+    ></script>
+
 </body>
 </html>
